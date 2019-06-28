@@ -1,6 +1,29 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+const axios = require('axios')
+
+// Make a request for a user with a given ID
+axios.get('https://api.jikan.moe/v3/anime/1/episodes')
+  .then(function (response) {
+    const res = JSON.stringify(response)
+    // handle success
+    return res
+  })
+  .then(function (res) {
+    // handle error
+    console.log(res);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .finally(function () {
+    // always executed
+  });
+
+console.log("I can see this!")
+
 
 function App() {
   return (
