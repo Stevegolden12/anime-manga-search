@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 const axios = require('axios')
 
@@ -13,18 +12,25 @@ class App extends React.Component {
   // Make a request for a user with a given ID
   getRequest() {
     const genre = document.getElementById('genreOption').value;
-    console.log(genre)
+    const randomNum = String(Math.floor(Math.random() * 10000))
+    console.log(randomNum)
 
+    const genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;
+    console.log(genreApi)
 
-    axios.get('https://api.jikan.moe/v3/anime/1/episodes')
+    axios.get(genreApi)
       .then(function (response) {
-        const res = JSON.stringify(response)
+        console.log(response.data)
+        /********************************************************
+         * Access the information and then display it below or a redirect file with express.
+         * 
+         * 
+         * 
+         * 
+         * ********************************************************/
+
         // handle success
-        return res
-      })
-      .then(function (res) {
-        // handle error
-        console.log(res);
+        return response
       })
       .catch(function (error) {
         // handle error
@@ -33,6 +39,7 @@ class App extends React.Component {
       .finally(function () {
         // always executed
       });
+
   }
 
 
@@ -40,7 +47,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Main Header</h1>
+        <h1>Anime/Manga Searcher</h1>
         < SelectOption />
         <button onClick={this.getRequest}>Get Request</button>
       </div>
@@ -59,7 +66,7 @@ function SubmitOption(functCall){
 function SelectOption(){
   return (
     <div>
-      <h2>Select an option:</h2>
+      <h2>Find a random anime or manga:</h2>
       <select id="genreOption">
         <option value="" selected></option>
         <option value="anime">Anime</option>
