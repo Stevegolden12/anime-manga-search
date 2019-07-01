@@ -48,8 +48,12 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>
-        < SelectOption />
+        <SelectOption />
         <button onClick={this.getRequest}>Get Request</button>
+        <br />
+        <SearchOption />
+        <br />
+
       </div>
     )
   }
@@ -57,9 +61,23 @@ class App extends React.Component {
 
 
 
-function SubmitOption(functCall){
+function SearchOption(){
   return(
-      <button onClick = { functCall } > Submit</button>
+    <div>
+      <h2>Search:</h2>
+      <select id="genreOption">
+        <option value="" selected></option>
+        <option value="anime">Anime</option>
+        <option value="manga">Manga</option>
+        <option value="person">Person</option>
+        <option value="character">Character</option>
+      </select>
+      <br/>
+      <label id="searchfield">What to search for:</label>
+      <br/>
+      <input name="searchfield" type="text" placeholder="Must be 3 characters" />
+      <br/>
+    </div>
     )
   }
 
