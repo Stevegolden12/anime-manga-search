@@ -42,6 +42,38 @@ class App extends React.Component {
 
   }
 
+  // Make a request for a user with a given ID
+  getSearchRequest() {
+    const genre = document.getElementById('genreSearch').value;  
+    const searchCh = document.getElementById('searchchar').value;
+
+    const genreApi = 'https://api.jikan.moe/v3/search/' + genre + "?q=" + searchCh + "&page=1";
+    console.log(genreApi)
+
+    axios.get(genreApi)
+      .then(function (response) {
+        console.log(response.data.results)
+        /********************************************************
+         * Access the information and then display it below or a redirect file with express.
+         * 
+         * 
+         * 
+         * 
+         * ********************************************************/
+
+        // handle success
+        return response
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+
+  }
+
 
 
   render() {
@@ -52,6 +84,7 @@ class App extends React.Component {
         <button onClick={this.getRequest}>Get Request</button>
         <br />
         <SearchOption />
+        <button onClick={this.getSearchRequest}>Search</button>
         <br />
 
       </div>
@@ -65,8 +98,8 @@ function SearchOption(){
   return(
     <div>
       <h2>Search:</h2>
-      <select id="genreOption">
-        <option value="" selected></option>
+      <select id="genreSearch">
+        <option value=""></option>
         <option value="anime">Anime</option>
         <option value="manga">Manga</option>
         <option value="person">Person</option>
@@ -75,7 +108,7 @@ function SearchOption(){
       <br/>
       <label id="searchfield">What to search for:</label>
       <br/>
-      <input name="searchfield" type="text" placeholder="Must be 3 characters" />
+      <input id="searchchar" name="searchfield" type="text" minLength="3" placeholder="Must be 3 characters" />
       <br/>
     </div>
     )
@@ -86,7 +119,7 @@ function SelectOption(){
     <div>
       <h2>Find a random anime or manga:</h2>
       <select id="genreOption">
-        <option value="" selected></option>
+        <option value=""></option>
         <option value="anime">Anime</option>
         <option value="manga">Manga</option>
       </select>
