@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-const axios = require('axios')
 
+
+const axios = require('axios')
 
 class App extends React.Component {
   constructor(props) {
@@ -79,9 +80,9 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Anime/Manga Searcher</h1>
-        <SelectOption />
-        <button onClick={this.getRequest}>Get Request</button>
+        <h1>Anime/Manga Searcher</h1>     
+        <SelectOption gRequest={this.getRequest}/>
+      
         <br />
         <SearchOption />
         <button onClick={this.getSearchRequest}>Search</button>
@@ -92,6 +93,22 @@ class App extends React.Component {
   }
 }
 
+function SelectOption(props) {
+  return (
+    <div>
+      <h2>Find a random anime or manga:</h2>
+      <form action="/random" method="GET">
+        <select id="genreOption">
+          <option value=""></option>
+          <option value="anime">Anime</option>
+          <option value="manga">Manga</option>
+        </select>
+        <br/>
+        <button onClick={props.gRequest}>Get Request</button> 
+      </form>
+    </div>
+  )
+}
 
 
 function SearchOption(){
@@ -114,17 +131,6 @@ function SearchOption(){
     )
   }
 
-function SelectOption(){
-  return (
-    <div>
-      <h2>Find a random anime or manga:</h2>
-      <select id="genreOption">
-        <option value=""></option>
-        <option value="anime">Anime</option>
-        <option value="manga">Manga</option>
-      </select>
-    </div>
-  )
-}
+
 
 export default App;
