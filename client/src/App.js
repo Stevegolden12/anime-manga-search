@@ -10,6 +10,41 @@ class App extends React.Component {
 
     this.getRequest = this.getRequest.bind(this);
   }
+
+  state = {
+    response: '',
+    post: '',
+    responseToPost: '',
+  };
+
+    componentDidMount() {
+    this.callApi()
+      .then(res => this.setState({ response: res.express }))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch('/api/hello');
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  };
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    const response = await fetch('/api/world', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ post: this.state.post }),
+    });
+    const body = await response.text();
+
+    this.setState({ responseToPost: body });
+  };
+
   // Make a request for a user with a given ID
   getRequest() {
     const genre = document.getElementById('genreOption').value;
@@ -78,6 +113,7 @@ class App extends React.Component {
 
 
   render() {
+
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>     
@@ -87,7 +123,8 @@ class App extends React.Component {
         <SearchOption />
         <button onClick={this.getSearchRequest}>Search</button>
         <br />
-
+        <h2>Testing</h2>
+        <p>{this.state.response}</p>
       </div>
     )
   }
@@ -97,7 +134,7 @@ function SelectOption(props) {
   return (
     <div>
       <h2>Find a random anime or manga:</h2>
-      <form action="/random" method="get">
+      <form action="/api/hello" method="get">
         <select id="genreOption">
           <option value=""></option>
           <option value="anime">Anime</option>

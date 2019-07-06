@@ -1,15 +1,16 @@
 {
-  "name": "anime-manga-search project",
+  "name": "anime-manga-search",
   "version": "1.0.0",
   "scripts": {
     "client": "cd client && yarn start",
-    "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "server": "nodemon server.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.17.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "yarn": "^1.16.0"
   },
   "devDependencies": {
     "concurrently": "^4.0.1"
