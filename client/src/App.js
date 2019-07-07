@@ -17,14 +17,15 @@ class App extends React.Component {
     responseToPost: '',
   };
 
+  /*
     componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ response: res.express }))
+      .then(res => this.setState({ response: "placeholder" }))
       .catch(err => console.log(err));
   }
-
+  
   callApi = async () => {
-    const response = await fetch('/api/hello');
+    const response = await fetch('/api/hello'); 
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
 
@@ -44,11 +45,12 @@ class App extends React.Component {
 
     this.setState({ responseToPost: body });
   };
+*/
 
   // Make a request for a user with a given ID
   getRequest() {
     const genre = document.getElementById('genreOption').value;
-    const randomNum = String(Math.floor(Math.random() * 10000))
+    const randomNum = String(Math.floor(Math.random() * 5000))
     console.log(randomNum)
 
     const genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;
@@ -57,6 +59,19 @@ class App extends React.Component {
     axios.get(genreApi)
       .then(function (response) {
         console.log(response.data)
+        let attachResults = document.getElementById('showResults')
+        let titleResult = document.createElement('h3', 'width', '100%')
+        console.log(response.data.title)
+        var imageResult = response.data.image_url
+        let showImage = document.createElement('IMG')
+       
+       
+        attachResults.appendChild(showImage)
+
+        showImage.setAttribute( 'src', imageResult )
+        var x = response.data.title
+          titleResult.innerHTML = x;
+
         /********************************************************
          * Access the information and then display it below or a redirect file with express.
          * 
@@ -89,6 +104,7 @@ class App extends React.Component {
     axios.get(genreApi)
       .then(function (response) {
         console.log(response.data.results)
+  
         /********************************************************
          * Access the information and then display it below or a redirect file with express.
          * 
@@ -117,14 +133,16 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>     
-        <SelectOption gRequest={this.getRequest}/>
-      
+        <SelectOption gRequest={this.getRequest}/>      
         <br />
+
+        {/* 
         <SearchOption />
         <button onClick={this.getSearchRequest}>Search</button>
         <br />
         <h2>Testing</h2>
         <p>{this.state.response}</p>
+        */}
       </div>
     )
   }
@@ -133,22 +151,21 @@ class App extends React.Component {
 function SelectOption(props) {
   return (
     <div>
-      <h2>Find a random anime or manga:</h2>
-      <form action="/api/hello" method="get">
+      <h2>Find a random anime or manga:</h2>     
         <select id="genreOption">
           <option value=""></option>
           <option value="anime">Anime</option>
           <option value="manga">Manga</option>
         </select>
-        <br />
+        <br/>
         {/* onClick={props.gRequest} */}
-        <button type="submit">Get Request</button> 
-      </form>
+        <button onClick={props.gRequest}>Get Request</button>    
+      <section id="showResults"></section>
     </div>
   )
 }
 
-
+/*
 function SearchOption(){
   return(
     <div>
@@ -168,7 +185,7 @@ function SearchOption(){
     </div>
     )
   }
-
+  */
 
 
 export default App;
