@@ -7,8 +7,10 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+app.use(express.static(__dirname + 'src'));
+
+app.get('/api/hello', (req, res) => { 
+  res.send("testing.html", { root: __dirname });
 });
 
 app.post('/api/world', (req, res) => {
