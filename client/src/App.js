@@ -50,7 +50,7 @@ class App extends React.Component {
   // Make a request for a user with a given ID
   getRequest() {
     const genre = document.getElementById('genreOption').value;
-    const randomNum = String(Math.floor(Math.random() * 10000))
+    const randomNum = String(Math.floor(Math.random() * 5000))
     console.log(randomNum)
 
     const genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;
@@ -59,9 +59,19 @@ class App extends React.Component {
     axios.get(genreApi)
       .then(function (response) {
         console.log(response.data)
-        //let attachResults = document.getElementById('showResults')
-       // console.log("AttachResults : " + attachResults)
-     
+        let attachResults = document.getElementById('showResults')
+        let titleResult = document.createElement('h3', 'width', '100%')
+        console.log(response.data.title)
+        var imageResult = response.data.image_url
+        let showImage = document.createElement('IMG')
+       
+       
+        attachResults.appendChild(showImage)
+
+        showImage.setAttribute( 'src', imageResult )
+        var x = response.data.title
+          titleResult.innerHTML = x;
+
         /********************************************************
          * Access the information and then display it below or a redirect file with express.
          * 
