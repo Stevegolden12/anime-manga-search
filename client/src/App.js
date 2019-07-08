@@ -57,68 +57,61 @@ class App extends React.Component {
 
     const genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;
     console.log(genreApi)
+    if (genre !== '') {
+      axios.get(genreApi)
+        .then((response) => {
+          console.log(response.data)
 
-    axios.get(genreApi)
-      .then((response)=> {
-        console.log(response.data)  
+          this.setState({
+            data: [response.data.title,
+            response.data.image_url,
+            response.data.synopsis,
+            ]
+          })
 
-        this.setState({
-          data: [response.data.title,
-                 response.data.image_url,
-                response.data.synopsis,
-          ]
+          // handle success
+          return response
         })
-        /********************************************************
-         * Access the information and then display it below or a redirect file with express.
-         * 
-         * 
-         * 
-         * 
-         * ********************************************************/
-      
-        // handle success
-        return response
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      })
-
+        .catch(function (error) {
+          // handle error
+          if (error.response.status === 404) {
+            alert(genre + " search has failed please try again.")
+          } else if(error.response.status === 429){
+            alert("Too many searches within a period of time.  Please wait and try again.")
+          }
+          console.log(error);
+        })
+        .finally(function () {
+          // always executed
+        })
+    } else {
+      alert("Please choose anime or manga from selection")
+    }
   }
+
 
   // Make a request for a user with a given ID
   getSearchRequest() {
     const genre = document.getElementById('genreSearch').value;  
-    const searchCh = document.getElementById('searchchar').value;
-
+    const searchCh = document.getElementById('searchchar').value;  
     const genreApi = 'https://api.jikan.moe/v3/search/' + genre + "?q=" + searchCh + "&page=1";
-    console.log(genreApi)
+    console.log(genreApi)  
+ 
+      axios.get(genreApi)
+        .then(function (response) {
+          console.log(response.data.results)
 
-    axios.get(genreApi)
-      .then(function (response) {
-        console.log(response.data.results)
-  
-        /********************************************************
-         * Access the information and then display it below or a redirect file with express.
-         * 
-         * 
-         * 
-         * 
-         * ********************************************************/
+          // handle success
+          return response
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+        .finally(function () {
+          // always executed
+        });
 
-        // handle success
-        return response
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });
 
   }
 
@@ -129,7 +122,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>     
-        <SelectOption gRequest={this.getRequest} data={this.state.data}/>      
+        <SelectOption gRequest={this.getRequest} noGenre={this.showNoGenreAlert} data={this.state.data}/>      
         <br />
 
         {/* 
@@ -145,7 +138,6 @@ class App extends React.Component {
 }
 
 function SelectOption(props) {
-  console.log("props.data: " + props.data)
   return (
     <div>
       <h2>Find a random anime or manga:</h2>     
@@ -154,9 +146,8 @@ function SelectOption(props) {
           <option value="anime">Anime</option>
           <option value="manga">Manga</option>
         </select>
-        <br/>
-        {/* onClick={props.gRequest} */}
-        <button onClick={props.gRequest}>Get Request</button>    
+        <br/> 
+      <button onClick={props.gRequest}>Get Request</button>
       <section id="showResults"></section>
       <div>
         <br/>
