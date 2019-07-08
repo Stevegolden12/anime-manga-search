@@ -8,14 +8,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      response: '',
+      post: '',
+      responseToPost: '',
+      data: [],
+    };
     this.getRequest = this.getRequest.bind(this);
   }
 
-  state = {
-    response: '',
-    post: '',
-    responseToPost: '',
-  };
+
 
   /*
     componentDidMount() {
@@ -57,21 +59,15 @@ class App extends React.Component {
     console.log(genreApi)
 
     axios.get(genreApi)
-      .then(function (response) {
-        console.log(response.data)
-        let attachResults = document.getElementById('showResults')
-        let titleResult = document.createElement('h3', 'width', '100%')
-        console.log(response.data.title)
-        var imageResult = response.data.image_url
-        let showImage = document.createElement('IMG')
-       
-       
-        attachResults.appendChild(showImage)
+      .then((response)=> {
+        console.log(response.data)  
 
-        showImage.setAttribute( 'src', imageResult )
-        var x = response.data.title
-          titleResult.innerHTML = x;
-
+        this.setState({
+          data: [response.data.title,
+                 response.data.image_url,
+                response.data.synopsis,
+          ]
+        })
         /********************************************************
          * Access the information and then display it below or a redirect file with express.
          * 
@@ -79,7 +75,7 @@ class App extends React.Component {
          * 
          * 
          * ********************************************************/
-
+      
         // handle success
         return response
       })
@@ -89,7 +85,7 @@ class App extends React.Component {
       })
       .finally(function () {
         // always executed
-      });
+      })
 
   }
 
@@ -133,7 +129,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>     
-        <SelectOption gRequest={this.getRequest}/>      
+        <SelectOption gRequest={this.getRequest} data={this.state.data}/>      
         <br />
 
         {/* 
@@ -149,6 +145,7 @@ class App extends React.Component {
 }
 
 function SelectOption(props) {
+  console.log("props.data: " + props.data)
   return (
     <div>
       <h2>Find a random anime or manga:</h2>     
@@ -161,6 +158,12 @@ function SelectOption(props) {
         {/* onClick={props.gRequest} */}
         <button onClick={props.gRequest}>Get Request</button>    
       <section id="showResults"></section>
+      <div>
+        <br/>
+        <img src={props.data[1]}></img>
+        <h3>{props.data[0]}</h3>
+        <p id="searchSummary">{props.data[2]}</p>
+      </div>
     </div>
   )
 }
