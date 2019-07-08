@@ -2,6 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\client",
+    "\\client\\public",
     "\\client\\src"
   ],
   "SelectedNode": "\\client\\src\\App.js",
