@@ -10,9 +10,8 @@ class App extends React.Component {
 
     this.state = {
       response: '',
-      post: '',
-      responseToPost: '',
-      data: [],
+      errorDes: '',
+        data: [],
     };
     this.getRequest = this.getRequest.bind(this);
   }
@@ -53,10 +52,12 @@ class App extends React.Component {
   getRequest() {
     const genre = document.getElementById('genreOption').value;
     const randomNum = String(Math.floor(Math.random() * 5000))
-    console.log(randomNum)
-
     const genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;
-    console.log(genreApi)
+
+    this.setState({
+      errorDes: ""
+    })  
+
     if (genre !== '') {
       axios.get(genreApi)
         .then((response) => {
@@ -72,20 +73,29 @@ class App extends React.Component {
           // handle success
           return response
         })
-        .catch(function (error) {
+        .catch((error) =>{
           // handle error
           if (error.response.status === 404) {
-            alert(genre + " search has failed please try again.")
-          } else if(error.response.status === 429){
-            alert("Too many searches within a period of time.  Please wait and try again.")
+            var fileNotFounderror = genre + " search has failed please try again."
+            console.log(typeof fileNotFounderror)
+            this.setState({
+              errorDes: fileNotFounderror 
+            })
+       
+          } else if (error.response.status === 429) {
+            this.setState({
+              errorDes: "Too many searches within a period of time.  Please wait and try again."
+            })        
           }
           console.log(error);
         })
-        .finally(function () {
+        .finally(() =>{
           // always executed
         })
     } else {
-      alert("Please choose anime or manga from selection")
+      this.setState({
+        errorDes: "Please choose anime or manga from selection"
+      })        
     }
   }
 
@@ -122,7 +132,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>     
-        <SelectOption gRequest={this.getRequest} noGenre={this.showNoGenreAlert} data={this.state.data}/>      
+        <SelectOption gRequest={this.getRequest} noGenre={this.showNoGenreAlert} data={this.state.data} errorDescr={this.state.errorDes}/>      
         <br />
 
         {/* 
@@ -148,6 +158,7 @@ function SelectOption(props) {
         </select>
         <br/> 
       <button onClick={props.gRequest}>Get Request</button>
+      <p id="errorDesc">{props.errorDescr}</p>
       <section id="showResults"></section>
       <div>
         <br/>
