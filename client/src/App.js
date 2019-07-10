@@ -9,50 +9,25 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      genre: '',
+      randomNum: String(Math.floor(Math.random() * 5000)),
+      genreApi: '',
       response: '',
       errorDes: '',
-        data: [],
+      data: [],
     };
+
     this.getRequest = this.getRequest.bind(this);
+
   }
 
-
-
-  /*
-    componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: "placeholder" }))
-      .catch(err => console.log(err));
-  }
-  
-  callApi = async () => {
-    const response = await fetch('/api/hello'); 
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
-  handleSubmit = async e => {
-    e.preventDefault();
-    const response = await fetch('/api/world', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ post: this.state.post }),
-    });
-    const body = await response.text();
-
-    this.setState({ responseToPost: body });
-  };
-*/
 
   // Make a request for a user with a given ID
-  getRequest() {
-    const genre = document.getElementById('genreOption').value;
-    const randomNum = String(Math.floor(Math.random() * 5000))
-    const genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;
+ getRequest(){
+   var genre = document.getElementById('genreOption').value;
+   var randomNum = String(Math.floor(Math.random() * 5000))
+   var genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;  
+
 
     this.setState({
       errorDes: ""
@@ -76,12 +51,37 @@ class App extends React.Component {
         .catch((error) =>{
           // handle error
           if (error.response.status === 404) {
-            var fileNotFounderror = genre + " search has failed please try again."
+
+            randomNum = String(Math.floor(Math.random() * 5000))
+            genreApi = 'https://api.jikan.moe/v3/' + genre + '/' + randomNum;  
+            axios.get(genreApi)
+              .then((response) => {
+                console.log(response.data)
+
+                this.setState({
+                  data: [response.data.title,
+                  response.data.image_url,
+                  response.data.synopsis,
+                  ]
+                })
+
+                // handle success
+                return response
+              })
+              .catch((error) => {
+                var fileNotFounderror = "Search not found, please retry"
+                console.log(typeof fileNotFounderror)
+                this.setState({
+                  errorDes: fileNotFounderror
+                })
+              })
+            /*
+            var fileNotFounderror = "Search not found, please retry"
             console.log(typeof fileNotFounderror)
             this.setState({
               errorDes: fileNotFounderror 
             })
-       
+            */
           } else if (error.response.status === 429) {
             this.setState({
               errorDes: "Too many searches within a period of time.  Please wait and try again."
@@ -93,7 +93,7 @@ class App extends React.Component {
           // always executed
         })
     } else {
-      this.setState({
+      this.setState({           
         errorDes: "Please choose anime or manga from selection"
       })        
     }
@@ -102,9 +102,9 @@ class App extends React.Component {
 
   // Make a request for a user with a given ID
   getSearchRequest() {
-    const genre = document.getElementById('genreSearch').value;  
-    const searchCh = document.getElementById('searchchar').value;  
-    const genreApi = 'https://api.jikan.moe/v3/search/' + genre + "?q=" + searchCh + "&page=1";
+    var genre = document.getElementById('genreSearch').value;  
+    var searchCh = document.getElementById('searchchar').value;  
+    var genreApi = 'https://api.jikan.moe/v3/search/' + genre + "?q=" + searchCh + "&page=1";
     console.log(genreApi)  
  
       axios.get(genreApi)
@@ -127,12 +127,11 @@ class App extends React.Component {
 
 
 
-  render() {
-
+  render() { 
     return (
       <div className="App">
         <h1>Anime/Manga Searcher</h1>     
-        <SelectOption gRequest={this.getRequest} noGenre={this.showNoGenreAlert} data={this.state.data} errorDescr={this.state.errorDes}/>      
+        <SelectOption gRequest={this.getRequest} noGenre={this.showNoGenreAlert} data={this.state.data} errorDescr={this.state.errorDes} />      
         <br />
 
         {/* 
